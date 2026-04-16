@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cipher Machine</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #0a0f1f;
+        color: #e2e8f0;
+        margin: 0;
+    }
+
+    header {
+        background: #020617;
+        padding: 20px;
+        text-align: center;
+        font-size: 24px;
+        letter-spacing: 2px;
+        border-bottom: 2px solid #ec4899;
+    }
+
+    section {
+        padding: 20px;
+        margin: 15px;
+        background: #0f172a;
+        border-radius: 10px;
+        border: 1px solid #1e293b;
+    }
+
+    h2 {
+        color: #93c5fd;
+        margin-bottom: 10px;
+    }
+
+    textarea {
+        width: 100%;
+        padding: 10px;
+        margin-top: 10px;
+        background: #020617;
+        color: white;
+        border: 1px solid #1e293b;
+        border-radius: 5px;
+    }
+
+    textarea:focus {
+        outline: none;
+        border-color: #ec4899;
+    }
+
+    button {
+        margin-top: 10px;
+        padding: 10px 15px;
+        background: #1e293b;
+        border: 1px solid #334155;
+        color: #e2e8f0;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: 0.2s;
+    }
+
+    button:hover {
+        border-color: #ec4899;
+        color: #ec4899;
+    }
+
+    .output {
+        margin-top: 10px;
+        padding: 10px;
+        background: #020617;
+        border-radius: 5px;
+        border: 1px solid #1e293b;
+        min-height: 40px;
+        font-family: monospace;
+    }
+
+    .guide {
+        font-family: monospace;
+        white-space: pre-line;
+        color: #94a3b8;
+    }
+
+    footer {
+        text-align: center;
+        padding: 15px;
+        font-size: 14px;
+        color: #64748b;
+        border-top: 1px solid #1e293b;
+    }
+
+    .credits {
+        color: #ec4899;
+    }
+</style>
+</head>
+<body>
+
+<header>cactuscode</header>
+
+<section>
+<h2>Encrypt Message</h2>
+<textarea id="inputText" placeholder="Enter message..."></textarea>
+<button onclick="encrypt()">Encrypt</button>
+<div class="output" id="encryptedOutput"></div>
+</section>
+
+<section>
+<h2>Decrypt Message</h2>
+<textarea id="decryptText" placeholder="Paste encrypted message..."></textarea>
+<button onclick="decrypt()">Decrypt</button>
+<div class="output" id="decryptedOutput"></div>
+</section>
+
+<section>
+<h2>📜 Cipher Guide</h2>
+<div class="guide">
+Step 1: Reverse text
+Step 2: Shift characters (Caesar +3)
+Step 3: Convert to Base64
+Step 4: Add salt pattern (#@!)
+
+To decode:
+Reverse all steps in opposite order.
+</div>
+</section>
+
+<footer>
+Credits: <span class="credits">cactusdancer</span>
+</footer>
+
+<script>
+function shiftText(text, shift) {
+    return text.split('').map(char => {
+        return String.fromCharCode(char.charCodeAt(0) + shift);
+    }).join('');
+}
+
+function encrypt() {
+    let text = document.getElementById("inputText").value;
+
+    let step1 = text.split('').reverse().join('');
+    let step2 = shiftText(step1, 3);
+    let step3 = btoa(step2);
+    let final = "#@!" + step3 + "!@#";
+
+    document.getElementById("encryptedOutput").innerText = final;
+}
+
+function decrypt() {
+    let text = document.getElementById("decryptText").value;
+
+    let step1 = text.replace("#@!", "").replace("!@#", "");
+    let step2 = atob(step1);
+    let step3 = shiftText(step2, -3);
+    let final = step3.split('').reverse().join('');
+
+    document.getElementById("decryptedOutput").innerText = final;
+}
+</script>
+
+</body>
+</html>
